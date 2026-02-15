@@ -9,7 +9,7 @@ function App() {
   const [progress, setProgress] = useState(0)
 
   // ✅ CHANGE THIS TO YOUR BACKEND URL
-  const BACKEND_URL = "http://localhost:5000/send"
+  const BACKEND_URL = "https://backendsendingapi.onrender.com/send"
 
   const handleFileChange = (event) => {
     const file = event.target.files[0]
