@@ -1,0 +1,147 @@
+.app-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 2rem;
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%,-50%);
+}
+
+.upload-card {
+  background: #1a1a1a;
+  border-radius: 12px;
+  padding: 3rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  max-width: 500px;
+  width: 100%;
+  text-align: center;
+}
+
+.upload-card h1 {
+  margin: 0 0 0.5rem 0;
+  font-size: 2rem;
+  color: #fff;
+}
+
+.description {
+  color: #888;
+  margin-bottom: 2rem;
+  font-size: 0.95rem;
+}
+
+.upload-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.file-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 1.5rem;
+  background: #2a2a2a;
+  border: 2px dashed #646cff;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.file-label:hover {
+  background: #333;
+  border-color: #535bf2;
+}
+
+.file-icon {
+  font-size: 1.5rem;
+}
+
+.file-text {
+  color: #fff;
+  font-size: 0.95rem;
+}
+
+.file-input {
+  display: none;
+}
+
+.send-button {
+  padding: 0.9rem 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  background-color: #646cff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.send-button:hover:not(:disabled) {
+  background-color: #535bf2;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(100, 108, 255, 0.3);
+}
+
+.send-button:disabled {
+  background-color: #4a4a4a;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.file-info {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background: #2a2a2a;
+  border-radius: 8px;
+  text-align: left;
+}
+
+.file-info p {
+  margin: 0.5rem 0;
+  color: #ccc;
+  font-size: 0.9rem;
+}
+
+.file-info strong {
+  color: #fff;
+}
+
+@media (prefers-color-scheme: light) {
+  .upload-card {
+    background: #ffffff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .upload-card h1 {
+    color: #213547;
+  }
+
+  .file-label {
+    background: #f5f5f5;
+    border-color: #646cff;
+  }
+
+  .file-label:hover {
+    background: #e8e8e8;
+  }
+
+  .file-text {
+    color: #213547;
+  }
+
+  .file-info {
+    background: #f5f5f5;
+  }
+
+  .file-info p {
+    color: #444;
+  }
+
+  .file-info strong {
+    color: #213547;
+  }
+}
