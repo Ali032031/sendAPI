@@ -6,6 +6,11 @@ const app = express()
 app.use(cors())
 app.use(express.json())
 
+app.use(cors({
+  origin: "http://localhost:5173",
+  methods: ["GET", "POST"],
+  allowedHeaders: ["Content-Type"],
+}))
 app.post("/send", async (req, res) => {
   try {
     const response = await axios.post(
