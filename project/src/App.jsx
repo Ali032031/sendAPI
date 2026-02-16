@@ -8,8 +8,31 @@ function App() {
   const [uploading, setUploading] = useState(false)
   const [progress, setProgress] = useState(0)
 
-  // ✅ CHANGE THIS TO YOUR BACKEND URL
   const BACKEND_URL = "https://backendsendingapi.onrender.com/send"
+
+  // ✅ Format Excel dates safely
+const formatDate = (value) => {
+  if (!value) return ''
+
+  let date
+
+  if (value instanceof Date) {
+    date = value
+  } else if (typeof value === 'string' && value.includes('/')) {
+    const [day, month, year] = value.split('/')
+    date = new Date(year, month - 1, day)
+  } else {
+    date = new Date(value)
+  }
+
+  if (isNaN(date)) {
+    console.warn('Invalid date:', value)
+    return ''
+  }
+
+  // ✅ Send ISO string (API friendly)
+  return date.toISOString().split('T')[0]
+}
 
   const handleFileChange = (event) => {
     const file = event.target.files[0]
@@ -25,17 +48,25 @@ function App() {
     setSelectedFile(file)
   }
 
-  // ✅ Read Excel → JSON
+  // ✅ Read Excel → JSON (FIXED VERSION)
   const readExcel = (file) => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader()
 
       reader.onload = (e) => {
         const data = new Uint8Array(e.target.result)
-        const workbook = XLSX.read(data, { type: 'array' })
+
+        const workbook = XLSX.read(data, {
+          type: 'array',
+          cellDates: true
+        })
 
         const sheet = workbook.Sheets[workbook.SheetNames[0]]
-        let json = XLSX.utils.sheet_to_json(sheet, { defval: '' })
+
+        let json = XLSX.utils.sheet_to_json(sheet, {
+          defval: '',
+          raw: false
+        })
 
         // Normalize headers
         json = json.map(row => {
@@ -66,7 +97,9 @@ function App() {
     try {
       const rows = await readExcel(selectedFile)
 
-      const validRows = rows.filter(row => row.email && row.email.trim() !== '')
+      const validRows = rows.filter(row =>
+        row.email && row.email.trim() !== ''
+      )
 
       if (validRows.length === 0) {
         alert("No valid rows with email found.")
@@ -77,24 +110,27 @@ function App() {
       for (let i = 0; i < validRows.length; i++) {
         const row = validRows[i]
 
+        // 🔍 Optional debug
+        console.log("DOB:", row.dob, typeof row.dob)
+
         const payload = {
-          nom: row.nom || '',
-          prenom: row.prenom || '',
-          email: (row.email || '').trim(),
-          tel_mobile: row.tel_mobile || '',
-          votre_sexe: row.votre_sexe || '',
-          cp: row.cp || '',
-          ville: row.ville || '',
-          personne_assur: row.personne_assur || '',
-          nbre_enfant: row.nbre_enfant || '',
-          regime_social: row.regime_social || '',
-          profession: row.profession || '',
-          dob: row.dob || '',
-          type_contrat: row.type_contrat || '',
-          date_contrat: row.date_contrat || '',
-          date_anni_contrat: row.date_anni_contrat || '',
-          civilite: row.civilite || '',
-          privacy: row.privacy || 'Y'
+          nom: row.nom ?? '',
+          prenom: row.prenom ?? '',
+          email: (row.email ?? '').trim(),
+          tel_mobile: row.tel_mobile ?? '',
+          votre_sexe: row.votre_sexe ?? '',
+          cp: row.cp ?? '',
+          ville: row.ville ?? '',
+          personne_assur: row.personne_assur ?? '',
+          nbre_enfant: row.nbre_enfant ?? '',
+          regime_social: row.regime_social ?? '',
+          profession: row.profession ?? '',
+          dob: formatDate(row.dob),
+          type_contrat: row.type_contrat ?? '',
+          date_contrat: formatDate(row.date_contrat),
+          date_anni_contrat: formatDate(row.date_anni_contrat),
+          civilite: row.civilite ?? '',
+          privacy: row.privacy ?? 'Y'
         }
 
         await axios.post(
@@ -103,7 +139,6 @@ function App() {
           { headers: { 'Content-Type': 'application/json' } }
         )
 
-        // Update progress
         const percent = Math.round(((i + 1) / validRows.length) * 100)
         setProgress(percent)
       }
