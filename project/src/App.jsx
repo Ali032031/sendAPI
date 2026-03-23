@@ -8,7 +8,7 @@ function App() {
   const [uploading, setUploading] = useState(false)
   const [progress, setProgress] = useState(0)
 
-  const BACKEND_URL = "https://backendsendingapi.onrender.com/send"
+  const BACKEND_URL = "https://sendapi-l8om.onrender.com/send"
 
   // ✅ Format Excel dates safely
 const formatDate = (value) => {
