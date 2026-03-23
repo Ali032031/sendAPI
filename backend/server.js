@@ -7,7 +7,7 @@ app.use(cors())
 app.use(express.json())
 
 app.use(cors({
-  origin: "https://sendapi4.onrender.com",
+  origin: "https://sendapi-1-2exr.onrender.com",
   methods: ["GET", "POST"],
   allowedHeaders: ["Content-Type"],
 }))
